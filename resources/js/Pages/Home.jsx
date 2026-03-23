@@ -1,6 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
+import AddToCartButton from '@/Components/AddToCartButton';
 import BookCover from '@/Components/BookCover';
 import StoreLayout from '@/Layouts/StoreLayout';
+import { formatPrice } from '@/lib/cart';
 
 export default function Home({ featuredBooks, categories }) {
     return (
@@ -63,8 +65,18 @@ export default function Home({ featuredBooks, categories }) {
                                     <p className="text-xs uppercase tracking-wide text-stone-500">{book.category?.name}</p>
                                     <h3 className="mt-1 line-clamp-2 text-base font-semibold text-stone-900">{book.title}</h3>
                                     <p className="mt-1 text-sm text-stone-600">{book.author}</p>
-                                    <p className="mt-3 text-lg font-bold text-amber-900">{book.price} EUR</p>
+                                    <p className="mt-3 text-lg font-bold text-amber-900">{formatPrice(book.price)}</p>
                                     <p className="text-xs text-stone-500">Estoc: {book.stock}</p>
+
+                                    <div className="mt-4 grid grid-cols-2 gap-2">
+                                        <Link
+                                            href={route('catalog.show', { slug: book.slug })}
+                                            className="rounded-md border border-amber-300 px-3 py-2 text-center text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
+                                        >
+                                            Veure fitxa
+                                        </Link>
+                                        <AddToCartButton book={book} compact />
+                                    </div>
                                 </div>
                             </article>
                         ))}

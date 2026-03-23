@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +15,9 @@ Route::get('/', function () {
 
 Route::get('/inici', [HomeController::class, 'index'])->name('home');
 Route::get('/cataleg', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/api/cataleg/{slug}/preview', [BookController::class, 'preview'])->name('catalog.preview');
+Route::get('/cataleg/{slug}', [BookController::class, 'show'])->name('catalog.show');
+Route::get('/cistella', [CartController::class, 'index'])->name('cart.index');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

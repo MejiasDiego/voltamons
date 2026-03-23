@@ -22,6 +22,13 @@ Primer lliurable visual i funcional de navegacio publica i accés inicial a pane
   - nova ruta protegida `admin/dashboard` amb middleware `role:admin`
 - Ajust menor a `Dashboard.jsx` per text en catala.
 
+### 2026-03-23 - v2
+- Integrada cistella a la navegacio publica mitjancant `CartBadge`.
+- Afegits botons d'accio a targetes de `Home` i `Catalog`:
+  - Afegir a cistella
+  - Acces a fitxa de producte
+- Afegida vista de detall de producte `Catalog/Show`.
+
 ## Decisions tecniques
 - S'ha separat layout public (`StoreLayout`) del layout autenticat per mantenir responsabilitats clares.
 - Els filtres de cataleg s'apliquen via querystring per mantenir URLs compartibles.

@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import CartBadge from '@/Components/CartBadge';
 
 const linkClasses =
     'rounded-md px-3 py-2 text-sm font-medium transition hover:bg-amber-100 hover:text-amber-900';
@@ -21,6 +22,7 @@ export default function StoreLayout({ children }) {
                         <Link href={route('catalog.index')} className={linkClasses}>
                             Cataleg
                         </Link>
+                        <CartBadge />
                         {auth?.user ? (
                             <>
                                 {auth.user.role === 'admin' && (
