@@ -26,6 +26,9 @@ Implementacio de la cistella de compra per usuaris sense login amb persistencia 
   - accio de buidar cistella
 - Afegida ruta `GET /cistella` (`cart.index`).
 
+### 2026-03-23 - v2
+- Integrada accio `Continuar compra` per connectar cistella amb el checkout real (`checkout.create`).
+
 ## Decisions tecniques
 - S'utilitza l'event custom `cart:updated` per sincronitzar components sense state global extern.
 - La cistella guarda un snapshot minim del producte (titol, preu, stock, portada, categoria) per render immediat.

@@ -29,12 +29,14 @@ class DatabaseSeeder extends Seeder
             'role_id' => $adminRoleId,
             'name' => 'Admin Voltamons',
             'email' => 'admin@voltamons.cat',
+            'password' => bcrypt('admin12345'),
         ]);
 
         User::factory()->create([
             'role_id' => $clientRoleId,
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('password'),
         ]);
     }
 }

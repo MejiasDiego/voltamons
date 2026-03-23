@@ -86,6 +86,8 @@ export function clearCart() {
     saveCartItems([]);
 }
 
+export const cartStorageKey = CART_STORAGE_KEY;
+
 export function getCartTotal(items) {
     return items.reduce((total, item) => total + Number(item.price) * Number(item.quantity), 0);
 }

@@ -33,6 +33,9 @@ export default function StoreLayout({ children }) {
                                 <Link href={route('dashboard')} className={linkClasses}>
                                     Compte
                                 </Link>
+                                <Link href={route('orders.index')} className={linkClasses}>
+                                    Comandes
+                                </Link>
                             </>
                         ) : (
                             <>

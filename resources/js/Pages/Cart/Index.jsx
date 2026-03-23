@@ -114,9 +114,10 @@ export default function CartIndex() {
 
                             <button
                                 type="button"
+                                onClick={() => (window.location.href = route('checkout.create'))}
                                 className="mt-5 w-full rounded-md bg-amber-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-900"
                             >
-                                Continuar compra (Bloc 3)
+                                Continuar compra
                             </button>
 
                             <button

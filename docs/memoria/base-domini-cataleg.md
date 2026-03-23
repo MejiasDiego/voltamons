@@ -34,3 +34,7 @@ Implementacio del model de dades base de cataleg per a categories, subcategories
 
 ## Pendents
 - Afegir CRUD admin de categories, subcategories i llibres amb operacions AJAX (fase posterior).
+
+### 2026-03-23 - v2
+- Afegits models `Order` i `OrderItem` com a extensio del domini de compra.
+- Definida relacio `User -> orders`.
