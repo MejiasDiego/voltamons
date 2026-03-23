@@ -29,6 +29,14 @@ Primer lliurable visual i funcional de navegacio publica i accés inicial a pane
   - Acces a fitxa de producte
 - Afegida vista de detall de producte `Catalog/Show`.
 
+### 2026-03-23 - v3
+- Evolucio del panell admin amb:
+  - llistat complet de llibres ordenat per estoc
+  - estat visual de productes disponibles/esgotats
+  - actualitzacio d'estoc en linea (AJAX)
+  - aplicacio de descompte global de preu (AJAX)
+  - grafica de vendes amb Canvas API
+
 ## Decisions tecniques
 - S'ha separat layout public (`StoreLayout`) del layout autenticat per mantenir responsabilitats clares.
 - Els filtres de cataleg s'apliquen via querystring per mantenir URLs compartibles.

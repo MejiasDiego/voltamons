@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CartController;
@@ -27,6 +28,8 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::patch('/books/{book}/stock', [AdminBookController::class, 'updateStock'])->name('books.stock.update');
+    Route::post('/books/discount', [AdminBookController::class, 'applyGlobalDiscount'])->name('books.discount.apply');
 });
 
 Route::middleware('auth')->group(function () {
