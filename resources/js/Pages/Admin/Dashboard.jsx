@@ -3,12 +3,83 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
+const palette = ['lightgreen', 'red', 'green', 'magenta', 'blue', 'yellow', 'black', '#92400e'];
+
+function arrayParseInt(array) {
+    const arrayInts = [];
+
+    for (let i = 0; i < array.length; i += 1) {
+        arrayInts[i] = parseInt(array[i], 10);
+    }
+
+    return arrayInts;
+}
+
+function getMaxValorArray(array) {
+    let numeroPetit = Number.MIN_SAFE_INTEGER;
+
+    for (let i = 0; i < array.length; i += 1) {
+        if (array[i] >= numeroPetit) {
+            numeroPetit = array[i];
+        }
+    }
+
+    return numeroPetit;
+}
+
+function crearGrafic({ context, canvas, arrayProducte, arrayDades, arrayColors, titolGrafic }) {
+    const dadesInt = arrayParseInt(arrayDades);
+    const numeroMajor = getMaxValorArray(dadesInt);
+
+    const marge = 28;
+    const yBase = canvas.height - marge * 3;
+    const alturaUtil = canvas.height - marge * 5;
+    const ampladaUtil = canvas.width - marge * 2;
+    const width = ampladaUtil / dadesInt.length;
+
+    for (let i = 0; i < dadesInt.length; i += 1) {
+        context.fillStyle = arrayColors[i % arrayColors.length];
+        const x = marge + i * width;
+
+        const alturaEscalada = (dadesInt[i] / numeroMajor) * alturaUtil;
+        const y = yBase - alturaEscalada;
+
+        context.fillRect(x, y, width - 6, alturaEscalada);
+    }
+
+    context.fillStyle = '#1f2937';
+    context.font = '16px Montserrat, sans-serif';
+    context.textAlign = 'center';
+    context.fillText(titolGrafic, canvas.width / 2, canvas.height - 18);
+
+    const numLinies = 5;
+    context.strokeStyle = '#d1d5db';
+    context.lineWidth = 1;
+    context.font = '12px Arial';
+    context.fillStyle = '#374151';
+    context.textAlign = 'right';
+    const xText = marge - 7;
+
+    for (let i = 0; i <= numLinies; i += 1) {
+        const valorLinia = (numeroMajor / numLinies) * i;
+        const y = yBase - (valorLinia / numeroMajor) * alturaUtil;
+
+        context.beginPath();
+        context.moveTo(marge, y);
+        context.lineTo(canvas.width - marge, y);
+        context.stroke();
+
+        context.fillText(Math.round(valorLinia), xText, y + 4);
+    }
+}
+
 export default function AdminDashboard({ stats, books: initialBooks, salesChart }) {
     const [books, setBooks] = useState(initialBooks);
     const [discountPercent, setDiscountPercent] = useState(0);
     const [isSubmittingDiscount, setIsSubmittingDiscount] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const chartRef = useRef(null);
+    const [legendData, setLegendData] = useState([]);
 
     const cards = [
         { label: 'Llibres', value: stats.books },
@@ -42,42 +113,30 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
             ctx.fillStyle = '#6b7280';
             ctx.font = '16px sans-serif';
             ctx.fillText('Encara no hi ha vendes per mostrar.', 24, 40);
+            setLegendData([]);
             return;
         }
 
-        const chartPadding = { top: 20, right: 20, bottom: 80, left: 40 };
-        const chartWidth = width - chartPadding.left - chartPadding.right;
-        const chartHeight = height - chartPadding.top - chartPadding.bottom;
-        const maxValue = Math.max(...data.map((entry) => Number(entry.total_sold)), 1);
-        const barGap = 16;
-        const barWidth = (chartWidth - barGap * (data.length - 1)) / data.length;
+        const productes = data.map((entry) => String(entry.title_snapshot));
+        const dadesArray = data.map((entry) => String(entry.total_sold));
+        const colorsArray = data.map((_, index) => palette[index % palette.length]);
 
-        ctx.strokeStyle = '#d1d5db';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(chartPadding.left, chartPadding.top + chartHeight);
-        ctx.lineTo(chartPadding.left + chartWidth, chartPadding.top + chartHeight);
-        ctx.stroke();
-
-        data.forEach((entry, index) => {
-            const value = Number(entry.total_sold);
-            const barHeight = (value / maxValue) * chartHeight;
-            const x = chartPadding.left + index * (barWidth + barGap);
-            const y = chartPadding.top + chartHeight - barHeight;
-
-            ctx.fillStyle = '#92400e';
-            ctx.fillRect(x, y, barWidth, barHeight);
-
-            ctx.fillStyle = '#1f2937';
-            ctx.font = '12px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(String(value), x + barWidth / 2, y - 8);
-
-            const title = String(entry.title_snapshot).slice(0, 14);
-            ctx.fillStyle = '#4b5563';
-            ctx.font = '11px sans-serif';
-            ctx.fillText(title, x + barWidth / 2, chartPadding.top + chartHeight + 18);
+        crearGrafic({
+            context: ctx,
+            canvas,
+            arrayProducte: productes,
+            arrayDades: dadesArray,
+            arrayColors: colorsArray,
+            titolGrafic: 'Vendes per producte',
         });
+
+        setLegendData(
+            productes.map((producte, index) => ({
+                producte,
+                valor: dadesArray[index],
+                color: colorsArray[index],
+            })),
+        );
     }, [salesChart]);
 
     const updateStock = async (bookId, stock) => {
@@ -175,6 +234,14 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
                         </div>
                         <div className="px-6 py-4">
                             <canvas ref={chartRef} width="1000" height="340" className="h-auto w-full rounded border border-gray-100 bg-white" />
+
+                            <div id="llegenda" className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                                {legendData.map((item) => (
+                                    <p key={item.producte} className="text-sm font-medium" style={{ color: item.color }}>
+                                        {item.producte}: {item.valor}
+                                    </p>
+                                ))}
+                            </div>
                         </div>
                     </section>
 

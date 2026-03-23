@@ -25,9 +25,23 @@ Implementacio del bloc d'administracio per control d'estoc, descomptes i seguime
   - comptador de productes sense estoc
   - dades de vendes agregades per producte
 
+### 2026-03-23 - v2
+- Substituit el Canvas actual pel Canvas treballat a classe (`dmejias_canvas/dmejias_canvas/grafica.js`) adaptat a React.
+- S'ha mantingut la logica principal original del Canvas:
+  - funcio de parseig de dades a enters
+  - obtencio del valor maxim
+  - escalat proporcional de barres
+  - dibuix de linies guia amb valors
+  - llegenda de productes i valors
+- Modificacions minimes aplicades (necessaries d'integracio):
+  - eliminacio de `prompt` i entrada de dades via `salesChart`
+  - titol i posicions adaptades a la mida del canvas del panell
+  - llegenda renderitzada en React (`div` equivalent a `#llegenda`)
+  - paleta de colors adaptada a l'entorn actual
+
 ## Decisions tecniques
 - Canvis d'estoc i preu s'executen via AJAX per complir requisit d'interaccio sense recarrega.
-- La grafica usa Canvas API nativa sense llibreries externes.
+- La grafica usa Canvas API nativa sense llibreries externes i es basa en la logica del Canvas fet a classe.
 - Dades de vendes provenen de `order_items` per tenir històric immutable de comandes.
 
 ## Proves i validacions
