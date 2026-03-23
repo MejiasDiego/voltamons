@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\OpinionController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
@@ -19,6 +20,11 @@ Route::get('/', function () {
 Route::get('/inici', [HomeController::class, 'index'])->name('home');
 Route::get('/cataleg', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/api/cataleg/{slug}/preview', [BookController::class, 'preview'])->name('catalog.preview');
+Route::get('/api/books/{book}/opinions', [OpinionController::class, 'getOpinions'])->name('api.opinions.index');
+Route::get('/api/books/{book}/rating', [OpinionController::class, 'getRating'])->name('api.opinions.rating');
+Route::post('/api/books/{book}/opinions', [OpinionController::class, 'sendOpinion'])
+    ->middleware('auth')
+    ->name('api.opinions.store');
 Route::get('/cataleg/{slug}', [BookController::class, 'show'])->name('catalog.show');
 Route::get('/cistella', [CartController::class, 'index'])->name('cart.index');
 

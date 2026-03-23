@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\OrderItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,6 +32,20 @@ class BookController extends Controller
             ->where('is_active', true)
             ->firstOrFail();
 
+        $pendingCommentOrderItemId = null;
+        $user = $request->user();
+
+        if ($user) {
+            $pendingItem = OrderItem::query()
+                ->whereHas('order', fn ($query) => $query->where('user_id', $user->id))
+                ->where('book_id', $book->id)
+                ->where('has_to_comment', true)
+                ->latest('id')
+                ->first();
+
+            $pendingCommentOrderItemId = $pendingItem?->id;
+        }
+
         $relatedBooks = Book::query()
             ->where('is_active', true)
             ->where('id', '!=', $book->id)
@@ -44,6 +59,7 @@ class BookController extends Controller
                 'book' => $book,
                 'relatedBooks' => $relatedBooks,
                 'isModal' => true,
+                'pendingCommentOrderItemId' => $pendingCommentOrderItemId,
             ]);
         }
 
@@ -51,6 +67,7 @@ class BookController extends Controller
             'book' => $book,
             'relatedBooks' => $relatedBooks,
             'isModal' => false,
+            'pendingCommentOrderItemId' => $pendingCommentOrderItemId,
         ]);
     }
 }

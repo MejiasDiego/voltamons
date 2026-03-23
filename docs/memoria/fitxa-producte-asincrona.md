@@ -18,6 +18,10 @@ Afegir consulta de detall de producte sense recarregar la pagina per complir req
 - Creada pagina de fitxa completa `Catalog/Show` per navegacio directa.
 - Afegida ruta `GET /cataleg/{slug}` (`catalog.show`).
 
+### 2026-03-23 - v2
+- La fitxa de producte integra mòdul asíncron d'opinions i valoracions.
+- Afegit formulari d'enviament de valoracio amb estrelles i refresc sense recarrega.
+
 ## Decisions tecniques
 - Es manté endpoint JSON separat per a la vista rapida i ruta Inertia per a fitxa completa.
 - El modal treballa sobre l'state local per simplicitat i velocitat.
