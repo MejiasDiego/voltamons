@@ -33,10 +33,24 @@ Implementacio del bloc d'opinions/valoracions per producte amb API i recordatori
   - en enviar comentari, `has_to_comment` passa a `false`
 - Afegit component reutilitzable `OpinionStars`.
 
+### 2026-03-23 - v2
+- API adaptada al contracte SwaggerHub `MPALAU2/getOpinions/1.1.0`.
+- Endpoints disponibles segons especificacio:
+  - `GET /api/getOpinions/{idProducte}`
+  - `POST /api/sendOpinion`
+  - `GET /api/getRating`
+  - `GET /api/getAllOpinions`
+- Afegit suport de query param `bd` (`jdbc|jpa|mongodb`) amb validacio.
+- Respostes adaptades als esquemes Swagger (`Producte`, `ProducteRating`, `GenericResponse`, `ErrorResponse`).
+- Manteniment estricte de la regla de negoci de compra pendent:
+  - `sendOpinion` nomes permet comentar si existeix `order_item.has_to_comment=true` del mateix usuari i producte.
+  - en enviar opinio correcta, `has_to_comment` passa a `false`.
+- Frontend de fitxa adaptat al nou contracte de resposta (`opinionId`, `timeStamp`, `title`, `opinion`).
+
 ## Decisions tecniques
-- L'API d'opinions s'ha implementat dins Laravel per mantenir coherencia del monolit.
-- L'accio `sendOpinion` requereix autenticacio i valida compra real pendent del llibre.
-- Les consultes i formulari a frontend funcionen via `axios`.
+- L'API d'opinions s'ha implementat dins Laravel i exposada amb contracte SwaggerHub requerit.
+- L'accio `sendOpinion` requereix autenticacio i manté control de compra pendent (`has_to_comment`).
+- Les consultes i formulari a frontend funcionen via `axios` consumint directament els endpoints Swagger.
 
 ## Proves i validacions
 - Validacio prevista: usuari amb compra pendent pot valorar.

@@ -15,7 +15,7 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
     const [isLoadingOpinions, setIsLoadingOpinions] = useState(false);
     const [isSubmittingOpinion, setIsSubmittingOpinion] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState('');
-    const [form, setForm] = useState({ rating: 0, comment: '' });
+    const [form, setForm] = useState({ rating: 0, title: '', comment: '' });
 
     const hasPendingComment = useMemo(() => Boolean(pendingCommentOrderItemId), [pendingCommentOrderItemId]);
 
@@ -24,12 +24,39 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
 
         try {
             const [opinionsResponse, ratingResponse] = await Promise.all([
-                axios.get(route('api.opinions.index', { book: book.id }), { params }),
-                axios.get(route('api.opinions.rating', { book: book.id })),
+                axios.get(route('api.opinions.getOpinions', { idProducte: book.id }), {
+                    params: {
+                        ...params,
+                        bd: 'jpa',
+                    },
+                }),
+                axios.get(route('api.opinions.getRating'), {
+                    params: {
+                        bd: 'jpa',
+                    },
+                }),
             ]);
 
             setOpinions(opinionsResponse.data.opinions || []);
-            setRatingInfo(ratingResponse.data || { rating: 0, count: 0 });
+
+            const ratingEntry = (ratingResponse.data || []).find((entry) => Number(entry.idProducte) === Number(book.id));
+
+            if (!ratingEntry) {
+                setRatingInfo({ rating: 0, count: 0 });
+            } else {
+                const ratings = ratingEntry.ratings || [0, 0, 0, 0, 0];
+                const totalCount = Number(ratingEntry.totalOpinions || 0);
+                const weightedSum = ratings.reduce((acc, count, index) => acc + Number(count) * (index + 1), 0);
+                const average = totalCount > 0 ? weightedSum / totalCount : 0;
+
+                setRatingInfo({
+                    rating: average,
+                    count: totalCount,
+                });
+            }
+        } catch {
+            setOpinions([]);
+            setRatingInfo({ rating: 0, count: 0 });
         } finally {
             setIsLoadingOpinions(false);
         }
@@ -61,21 +88,28 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
             return;
         }
 
-        if (form.rating < 1 || form.comment.trim().length < 5) {
-            setFeedbackMessage('Cal seleccionar estrelles i escriure un comentari minim de 5 caracters.');
+        if (form.rating < 1 || form.title.trim().length < 2 || form.comment.trim().length < 5) {
+            setFeedbackMessage('Cal afegir estrelles, titol i comentari minim de 5 caracters.');
             return;
         }
 
         setIsSubmittingOpinion(true);
 
         try {
-            await axios.post(route('api.opinions.store', { book: book.id }), {
+            await axios.post(route('api.opinions.sendOpinion'), {
+                idProduct: String(book.id),
+                idUser: null,
+                user: null,
                 rating: form.rating,
-                comment: form.comment,
-                order_item_id: pendingCommentOrderItemId,
+                title: form.title,
+                text: form.comment,
+            }, {
+                params: {
+                    bd: 'jpa',
+                },
             });
 
-            setForm({ rating: 0, comment: '' });
+            setForm({ rating: 0, title: '', comment: '' });
             setFeedbackMessage('Gracies! Valoracio enviada correctament.');
             await loadOpinions();
         } catch {
@@ -186,6 +220,14 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
                             <OpinionStars interactive value={form.rating} onSelect={(value) => setForm((previous) => ({ ...previous, rating: value }))} />
                         </div>
                         <textarea
+                            value={form.title}
+                            onChange={(event) => setForm((previous) => ({ ...previous, title: event.target.value }))}
+                            className="mt-3 w-full rounded-md border-stone-300 text-sm focus:border-amber-500 focus:ring-amber-500"
+                            rows={1}
+                            placeholder="Titol de la valoracio"
+                        />
+
+                        <textarea
                             value={form.comment}
                             onChange={(event) => setForm((previous) => ({ ...previous, comment: event.target.value }))}
                             className="mt-3 w-full rounded-md border-stone-300 text-sm focus:border-amber-500 focus:ring-amber-500"
@@ -211,13 +253,14 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
                             <p className="text-sm text-stone-600">Encara no hi ha opinions per aquest llibre.</p>
                         ) : (
                             opinions.map((opinion) => (
-                                <article key={opinion.id} className="rounded-lg border border-stone-200 p-4">
+                                <article key={opinion.opinionId} className="rounded-lg border border-stone-200 p-4">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-semibold text-stone-900">{opinion.user_name}</p>
+                                        <p className="text-sm font-semibold text-stone-900">{opinion.user || 'Anònim'}</p>
                                         <OpinionStars value={opinion.rating} size="text-base" />
                                     </div>
-                                    <p className="mt-2 text-sm text-stone-700">{opinion.comment}</p>
-                                    <p className="mt-1 text-xs text-stone-500">{new Date(opinion.created_at).toLocaleString('ca-ES')}</p>
+                                    <p className="mt-2 text-sm font-semibold text-stone-800">{opinion.title}</p>
+                                    <p className="mt-1 text-sm text-stone-700">{opinion.opinion}</p>
+                                    <p className="mt-1 text-xs text-stone-500">{new Date(opinion.timeStamp).toLocaleString('ca-ES')}</p>
                                 </article>
                             ))
                         )}

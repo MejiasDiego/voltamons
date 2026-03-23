@@ -20,11 +20,12 @@ Route::get('/', function () {
 Route::get('/inici', [HomeController::class, 'index'])->name('home');
 Route::get('/cataleg', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/api/cataleg/{slug}/preview', [BookController::class, 'preview'])->name('catalog.preview');
-Route::get('/api/books/{book}/opinions', [OpinionController::class, 'getOpinions'])->name('api.opinions.index');
-Route::get('/api/books/{book}/rating', [OpinionController::class, 'getRating'])->name('api.opinions.rating');
-Route::post('/api/books/{book}/opinions', [OpinionController::class, 'sendOpinion'])
+Route::get('/api/getOpinions/{idProducte}', [OpinionController::class, 'getOpinions'])->name('api.opinions.getOpinions');
+Route::get('/api/getRating', [OpinionController::class, 'getRating'])->name('api.opinions.getRating');
+Route::get('/api/getAllOpinions', [OpinionController::class, 'getAllOpinions'])->name('api.opinions.getAllOpinions');
+Route::post('/api/sendOpinion', [OpinionController::class, 'sendOpinion'])
     ->middleware('auth')
-    ->name('api.opinions.store');
+    ->name('api.opinions.sendOpinion');
 Route::get('/cataleg/{slug}', [BookController::class, 'show'])->name('catalog.show');
 Route::get('/cistella', [CartController::class, 'index'])->name('cart.index');
 

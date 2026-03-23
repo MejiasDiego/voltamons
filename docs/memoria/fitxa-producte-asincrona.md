@@ -22,6 +22,10 @@ Afegir consulta de detall de producte sense recarregar la pagina per complir req
 - La fitxa de producte integra mòdul asíncron d'opinions i valoracions.
 - Afegit formulari d'enviament de valoracio amb estrelles i refresc sense recarrega.
 
+### 2026-03-23 - v3
+- La fitxa consumeix els endpoints del contracte SwaggerHub (`getOpinions`, `getRating`, `sendOpinion`).
+- Formulari adaptat amb camp `title` i mapatge de resposta a format oficial (`opinionId`, `timeStamp`, `opinion`).
+
 ## Decisions tecniques
 - Es manté endpoint JSON separat per a la vista rapida i ruta Inertia per a fitxa completa.
 - El modal treballa sobre l'state local per simplicitat i velocitat.

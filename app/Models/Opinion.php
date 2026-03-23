@@ -13,14 +13,17 @@ class Opinion extends Model
     protected $fillable = [
         'book_id',
         'order_item_id',
+        'id_user',
         'user_name',
         'rating',
+        'title',
         'comment',
     ];
 
     protected function casts(): array
     {
         return [
+            'id_user' => 'integer',
             'rating' => 'integer',
         ];
     }
