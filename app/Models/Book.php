@@ -10,6 +10,10 @@ class Book extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'cover_url',
+    ];
+
     protected $fillable = [
         'category_id',
         'subcategory_id',
@@ -41,5 +45,18 @@ class Book extends Model
     public function subcategory(): BelongsTo
     {
         return $this->belongsTo(Subcategory::class);
+    }
+
+    public function getCoverUrlAttribute(): string
+    {
+        if (! empty($this->cover_image)) {
+            return $this->cover_image;
+        }
+
+        if (! empty($this->isbn)) {
+            return 'https://covers.openlibrary.org/b/isbn/'.rawurlencode($this->isbn).'-L.jpg?default=false';
+        }
+
+        return asset('images/placeholders/book-cover.svg');
     }
 }

@@ -1,4 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
+import BookCover from '@/Components/BookCover';
 import StoreLayout from '@/Layouts/StoreLayout';
 
 const initialForm = {
@@ -100,12 +101,19 @@ export default function CatalogIndex({ books, categories, subcategories, filters
 
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {books.data.map((book) => (
-                            <article key={book.id} className="rounded-xl border border-amber-200 bg-white p-4 shadow-sm">
-                                <p className="text-xs uppercase tracking-wide text-stone-500">{book.category?.name}</p>
-                                <h2 className="mt-1 line-clamp-2 text-base font-semibold text-stone-900">{book.title}</h2>
-                                <p className="mt-1 text-sm text-stone-600">{book.author}</p>
-                                <p className="mt-3 text-lg font-bold text-amber-900">{book.price} EUR</p>
-                                <p className="text-xs text-stone-500">Estoc: {book.stock}</p>
+                            <article key={book.id} className="overflow-hidden rounded-xl border border-amber-200 bg-white shadow-sm">
+                                <BookCover
+                                    src={book.cover_url}
+                                    title={book.title}
+                                    className="h-72 w-full bg-amber-100 object-cover"
+                                />
+                                <div className="p-4">
+                                    <p className="text-xs uppercase tracking-wide text-stone-500">{book.category?.name}</p>
+                                    <h2 className="mt-1 line-clamp-2 text-base font-semibold text-stone-900">{book.title}</h2>
+                                    <p className="mt-1 text-sm text-stone-600">{book.author}</p>
+                                    <p className="mt-3 text-lg font-bold text-amber-900">{book.price} EUR</p>
+                                    <p className="text-xs text-stone-500">Estoc: {book.stock}</p>
+                                </div>
                             </article>
                         ))}
                     </div>
