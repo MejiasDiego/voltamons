@@ -25,18 +25,24 @@ class DatabaseSeeder extends Seeder
         $adminRoleId = Role::query()->where('slug', 'admin')->value('id');
         $clientRoleId = Role::query()->where('slug', 'client')->value('id');
 
-        User::factory()->create([
-            'role_id' => $adminRoleId,
-            'name' => 'Admin Voltamons',
-            'email' => 'admin@voltamons.cat',
-            'password' => bcrypt('admin12345'),
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => 'admin@voltamons.cat'],
+            [
+                'role_id' => $adminRoleId,
+                'name' => 'Admin Voltamons',
+                'password' => bcrypt('admin12345'),
+                'email_verified_at' => now(),
+            ],
+        );
 
-        User::factory()->create([
-            'role_id' => $clientRoleId,
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'role_id' => $clientRoleId,
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ],
+        );
     }
 }
