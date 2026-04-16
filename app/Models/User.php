@@ -24,6 +24,18 @@ class User extends Authenticatable
         'role_id',
         'name',
         'email',
+        'birth_date',
+        'phone',
+        'shipping_address',
+        'shipping_city',
+        'shipping_region',
+        'shipping_postal_code',
+        'billing_address',
+        'billing_city',
+        'billing_region',
+        'billing_postal_code',
+        'favorite_genre',
+        'reading_language',
         'password',
     ];
 
@@ -46,6 +58,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'birth_date' => 'date',
             'password' => 'hashed',
         ];
     }

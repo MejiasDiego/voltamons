@@ -20,6 +20,18 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
+            'birth_date' => '10/05/1998',
+            'phone' => '+34600111222',
+            'shipping_address' => 'Carrer de prova 12',
+            'shipping_city' => 'Barcelona',
+            'shipping_region' => 'Barcelona',
+            'shipping_postal_code' => '08001',
+            'billing_address' => 'Carrer de prova 12',
+            'billing_city' => 'Barcelona',
+            'billing_region' => 'Barcelona',
+            'billing_postal_code' => '08001',
+            'favorite_genre' => 'Narrativa',
+            'reading_language' => 'Catala',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',

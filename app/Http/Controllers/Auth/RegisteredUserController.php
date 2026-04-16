@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -32,19 +34,59 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'birth_date' => ['required', 'regex:/^\d{2}\/\d{2}\/\d{4}$/'],
+            'phone' => 'required|string|max:30',
+            'shipping_address' => 'required|string|max:190',
+            'shipping_city' => 'required|string|max:120',
+            'shipping_region' => 'required|string|max:120',
+            'shipping_postal_code' => 'required|string|max:20',
+            'billing_address' => 'nullable|string|max:190',
+            'billing_city' => 'nullable|string|max:120',
+            'billing_region' => 'nullable|string|max:120',
+            'billing_postal_code' => 'nullable|string|max:20',
+            'favorite_genre' => 'required|string|max:100',
+            'reading_language' => 'required|string|max:50',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $birthDate = Carbon::createFromFormat('d/m/Y', $validated['birth_date']);
+
+        if (! $birthDate) {
+            throw ValidationException::withMessages([
+                'birth_date' => 'Format de data invalid.',
+            ]);
+        }
+
+        $age = $birthDate->age;
+
+        if ($age < 18 || $age > 100) {
+            throw ValidationException::withMessages([
+                'birth_date' => 'Has de tenir entre 18 i 100 anys.',
+            ]);
+        }
 
         $clientRoleId = Role::query()->where('slug', 'client')->value('id');
 
         $user = User::create([
             'role_id' => $clientRoleId,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => Str::title($validated['name']),
+            'email' => $validated['email'],
+            'birth_date' => $birthDate->toDateString(),
+            'phone' => $validated['phone'],
+            'shipping_address' => $validated['shipping_address'],
+            'shipping_city' => Str::title($validated['shipping_city']),
+            'shipping_region' => Str::title($validated['shipping_region']),
+            'shipping_postal_code' => $validated['shipping_postal_code'],
+            'billing_address' => $validated['billing_address'] ?? $validated['shipping_address'],
+            'billing_city' => isset($validated['billing_city']) ? Str::title($validated['billing_city']) : Str::title($validated['shipping_city']),
+            'billing_region' => isset($validated['billing_region']) ? Str::title($validated['billing_region']) : Str::title($validated['shipping_region']),
+            'billing_postal_code' => $validated['billing_postal_code'] ?? $validated['shipping_postal_code'],
+            'favorite_genre' => $validated['favorite_genre'],
+            'reading_language' => $validated['reading_language'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         event(new Registered($user));

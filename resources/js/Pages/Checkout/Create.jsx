@@ -18,19 +18,19 @@ export default function CheckoutCreate({ authUser }) {
     const { data, setData, post, processing, errors } = useForm({
         full_name: authUser?.name || '',
         email: authUser?.email || '',
-        phone: '',
+        phone: authUser?.phone || '',
 
-        shipping_address: '',
-        shipping_city: '',
-        shipping_region: '',
-        shipping_postal_code: '',
+        shipping_address: authUser?.shipping_address || '',
+        shipping_city: authUser?.shipping_city || '',
+        shipping_region: authUser?.shipping_region || '',
+        shipping_postal_code: authUser?.shipping_postal_code || '',
 
         billing_same_as_shipping: true,
-        billing_full_name: '',
-        billing_address: '',
-        billing_city: '',
-        billing_region: '',
-        billing_postal_code: '',
+        billing_full_name: authUser?.name || '',
+        billing_address: authUser?.billing_address || authUser?.shipping_address || '',
+        billing_city: authUser?.billing_city || authUser?.shipping_city || '',
+        billing_region: authUser?.billing_region || authUser?.shipping_region || '',
+        billing_postal_code: authUser?.billing_postal_code || authUser?.shipping_postal_code || '',
 
         card_number: '',
         card_expiry: '',
@@ -48,6 +48,26 @@ export default function CheckoutCreate({ authUser }) {
             })),
         );
     }, [items, setData]);
+
+    useEffect(() => {
+        if (!data.billing_same_as_shipping) {
+            return;
+        }
+
+        setData('billing_full_name', data.full_name);
+        setData('billing_address', data.shipping_address);
+        setData('billing_city', data.shipping_city);
+        setData('billing_region', data.shipping_region);
+        setData('billing_postal_code', data.shipping_postal_code);
+    }, [
+        data.billing_same_as_shipping,
+        data.full_name,
+        data.shipping_address,
+        data.shipping_city,
+        data.shipping_region,
+        data.shipping_postal_code,
+        setData,
+    ]);
 
     const submit = (event) => {
         event.preventDefault();
