@@ -16,7 +16,6 @@ Actualitzacio del registre per complir els requisits de validacio client-side de
 - Afegida migracio de nous camps a `users`:
   - `birth_date`, `phone`
   - adreca enviament/facturacio (adreca, ciutat, provincia, codi postal)
-  - camps extra: `favorite_genre`, `reading_language`
 - `User` actualitzat amb `fillable` i `casts`.
 - `RegisteredUserController` actualitzat per:
   - validar nous camps
@@ -28,7 +27,6 @@ Actualitzacio del registre per complir els requisits de validacio client-side de
   - data de naixement i edat
   - telefon internacional
   - adreces i codis postals
-  - 2 camps extra de tematica
   - password strength amb `meter`
   - estils de focus/blur i validacio visual
 - `Checkout/Create.jsx` actualitzat per preomplir camps des de `authUser`.
@@ -47,3 +45,7 @@ Actualitzacio del registre per complir els requisits de validacio client-side de
 
 ## Pendents
 - Opcional: portar aquests camps al formulari d'edicio de perfil per manteniment per part del client.
+
+### 2026-03-24 - v2
+- Eliminats els camps extra `favorite_genre` i `reading_language` del registre.
+- Mantinguda la persistencia de dades utilitzables directament al checkout (contacte, enviament i facturacio).

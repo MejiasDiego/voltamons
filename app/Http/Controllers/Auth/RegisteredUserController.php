@@ -47,8 +47,6 @@ class RegisteredUserController extends Controller
             'billing_city' => 'nullable|string|max:120',
             'billing_region' => 'nullable|string|max:120',
             'billing_postal_code' => 'nullable|string|max:20',
-            'favorite_genre' => 'required|string|max:100',
-            'reading_language' => 'required|string|max:50',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -84,8 +82,6 @@ class RegisteredUserController extends Controller
             'billing_city' => isset($validated['billing_city']) ? Str::title($validated['billing_city']) : Str::title($validated['shipping_city']),
             'billing_region' => isset($validated['billing_region']) ? Str::title($validated['billing_region']) : Str::title($validated['shipping_region']),
             'billing_postal_code' => $validated['billing_postal_code'] ?? $validated['shipping_postal_code'],
-            'favorite_genre' => $validated['favorite_genre'],
-            'reading_language' => $validated['reading_language'],
             'password' => Hash::make($validated['password']),
         ]);
 

@@ -30,8 +30,6 @@ class RegistrationTest extends TestCase
             'billing_city' => 'Barcelona',
             'billing_region' => 'Barcelona',
             'billing_postal_code' => '08001',
-            'favorite_genre' => 'Narrativa',
-            'reading_language' => 'Catala',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',

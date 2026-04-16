@@ -42,8 +42,6 @@ class DatabaseSeeder extends Seeder
                 'billing_city' => 'Barcelona',
                 'billing_region' => 'Barcelona',
                 'billing_postal_code' => '08001',
-                'favorite_genre' => 'Narrativa',
-                'reading_language' => 'Catala',
             ],
         );
 
@@ -64,8 +62,6 @@ class DatabaseSeeder extends Seeder
                 'billing_city' => 'Valencia',
                 'billing_region' => 'Valencia',
                 'billing_postal_code' => '46021',
-                'favorite_genre' => 'Ciencia ficcio',
-                'reading_language' => 'Castella',
             ],
         );
     }

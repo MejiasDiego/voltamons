@@ -23,8 +23,6 @@ export default function Register() {
         billing_city: '',
         billing_region: '',
         billing_postal_code: '',
-        favorite_genre: '',
-        reading_language: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -115,8 +113,6 @@ export default function Register() {
             billing_city: true,
             billing_region: true,
             billing_postal_code: true,
-            favorite_genre: true,
-            reading_language: true,
             email: true,
             password: true,
             password_confirmation: true,
@@ -359,50 +355,6 @@ export default function Register() {
                         </div>
                     </div>
                 )}
-
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <InputLabel htmlFor="favorite_genre" value="Genere literari preferit" />
-                        <select
-                            id="favorite_genre"
-                            value={data.favorite_genre}
-                            onChange={(e) => setData('favorite_genre', e.target.value)}
-                            onFocus={() => handleFocus('favorite_genre')}
-                            onBlur={() => handleBlur('favorite_genre')}
-                            className={getFieldClassName('favorite_genre')}
-                            required
-                        >
-                            <option value="">Selecciona una opcio</option>
-                            <option value="Narrativa">Narrativa</option>
-                            <option value="Ciencia ficcio">Ciencia ficcio</option>
-                            <option value="No ficcio">No ficcio</option>
-                            <option value="Infantil i juvenil">Infantil i juvenil</option>
-                            <option value="Misteri">Misteri</option>
-                        </select>
-                        <InputError message={touched.favorite_genre ? uiErrors.favorite_genre : ''} className="mt-2" />
-                        <InputError message={errors.favorite_genre} className="mt-1" />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="reading_language" value="Idioma de lectura preferit" />
-                        <select
-                            id="reading_language"
-                            value={data.reading_language}
-                            onChange={(e) => setData('reading_language', e.target.value)}
-                            onFocus={() => handleFocus('reading_language')}
-                            onBlur={() => handleBlur('reading_language')}
-                            className={getFieldClassName('reading_language')}
-                            required
-                        >
-                            <option value="">Selecciona una opcio</option>
-                            <option value="Catala">Catala</option>
-                            <option value="Castella">Castella</option>
-                            <option value="Angles">Angles</option>
-                        </select>
-                        <InputError message={touched.reading_language ? uiErrors.reading_language : ''} className="mt-2" />
-                        <InputError message={errors.reading_language} className="mt-1" />
-                    </div>
-                </div>
 
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
@@ -666,14 +618,6 @@ function validateForm(data, passwordStrength) {
         if (!/^\d{4,10}$/.test(data.billing_postal_code.trim())) {
             nextErrors.billing_postal_code = 'Codi postal de facturacio invalid.';
         }
-    }
-
-    if (!data.favorite_genre) {
-        nextErrors.favorite_genre = 'Selecciona un genere preferit.';
-    }
-
-    if (!data.reading_language) {
-        nextErrors.reading_language = 'Selecciona un idioma de lectura.';
     }
 
     if (!/^\S+@\S+\.\S+$/.test(data.email.trim())) {

@@ -24,9 +24,6 @@ return new class extends Migration
             $table->string('billing_city', 120)->nullable()->after('billing_address');
             $table->string('billing_region', 120)->nullable()->after('billing_city');
             $table->string('billing_postal_code', 20)->nullable()->after('billing_region');
-
-            $table->string('favorite_genre', 100)->nullable()->after('billing_postal_code');
-            $table->string('reading_language', 50)->nullable()->after('favorite_genre');
         });
     }
 
@@ -47,8 +44,6 @@ return new class extends Migration
                 'billing_city',
                 'billing_region',
                 'billing_postal_code',
-                'favorite_genre',
-                'reading_language',
             ]);
         });
     }
