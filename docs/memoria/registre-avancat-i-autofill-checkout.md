@@ -49,3 +49,9 @@ Actualitzacio del registre per complir els requisits de validacio client-side de
 ### 2026-03-24 - v2
 - Eliminats els camps extra `favorite_genre` i `reading_language` del registre.
 - Mantinguda la persistencia de dades utilitzables directament al checkout (contacte, enviament i facturacio).
+
+### 2026-03-24 - v3
+- Reincorporats els 2 camps extra requerits per l'enunciat:
+  - `favorite_genre`
+  - `reading_language`
+- Camps reactivats tant a frontend (validacio JS) com a persistencia backend.

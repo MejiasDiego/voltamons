@@ -34,6 +34,8 @@ class User extends Authenticatable
         'billing_city',
         'billing_region',
         'billing_postal_code',
+        'favorite_genre',
+        'reading_language',
         'password',
     ];
 
