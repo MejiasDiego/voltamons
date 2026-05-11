@@ -281,7 +281,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                    <label className="inline-flex items-center gap-2 text-sm text-stone-700">
                         <input
                             type="checkbox"
                             checked={data.billing_same_as_shipping}
@@ -480,7 +480,7 @@ export default function Register() {
                 <div className="mt-4 flex items-center justify-end">
                     <Link
                         href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="rounded-md text-sm text-amber-700 underline hover:text-amber-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                     >
                         Ja tens compte?
                     </Link>

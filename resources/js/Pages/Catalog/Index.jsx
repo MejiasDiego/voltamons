@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import BookCover from '@/Components/BookCover';
 import AddToCartButton from '@/Components/AddToCartButton';
@@ -16,6 +16,38 @@ export default function CatalogIndex({ books, categories, subcategories, filters
     const form = { ...initialForm, ...filters };
     const [preview, setPreview] = useState(null);
     const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+    const [searchInput, setSearchInput] = useState(filters.search || '');
+    const searchDebounce = useRef(null);
+    const lastSentSearch = useRef(filters.search || '');
+
+    useEffect(() => {
+        if (filters.search !== lastSentSearch.current) {
+            setSearchInput(filters.search || '');
+            lastSentSearch.current = filters.search || '';
+        }
+    }, [filters.search]);
+
+    useEffect(() => {
+        if (searchDebounce.current) {
+            clearTimeout(searchDebounce.current);
+        }
+
+        searchDebounce.current = setTimeout(() => {
+            if (searchInput !== (filters.search || '')) {
+                lastSentSearch.current = searchInput;
+                router.get(route('catalog.index'), { ...form, search: searchInput }, {
+                    preserveState: true,
+                    replace: true,
+                });
+            }
+        }, 300);
+
+        return () => {
+            if (searchDebounce.current) {
+                clearTimeout(searchDebounce.current);
+            }
+        };
+    }, [searchInput]);
 
     const applyFilters = (nextFilters) => {
         router.get(route('catalog.index'), nextFilters, {
@@ -25,8 +57,15 @@ export default function CatalogIndex({ books, categories, subcategories, filters
     };
 
     const onChange = (key, value) => {
-        const next = { ...form, [key]: value };
-        applyFilters(next);
+        if (key === 'search') {
+            setSearchInput(value);
+        } else {
+            if (searchDebounce.current) {
+                clearTimeout(searchDebounce.current);
+                searchDebounce.current = null;
+            }
+            applyFilters({ ...form, search: searchInput, [key]: value });
+        }
     };
 
     const activeSubcategories = subcategories.filter((subcategory) => {
@@ -69,7 +108,7 @@ export default function CatalogIndex({ books, categories, subcategories, filters
                             </label>
                             <input
                                 id="search"
-                                value={form.search}
+                                value={searchInput}
                                 onChange={(event) => onChange('search', event.target.value)}
                                 className="w-full rounded-md border-stone-300 text-sm focus:border-amber-500 focus:ring-amber-500"
                                 placeholder="Titol, autor o ISBN"

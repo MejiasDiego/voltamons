@@ -1,0 +1,68 @@
+Redireccions després del registre:
+Usuari normal → redirect directe a http://127.0.0.1:8000/inici
+Usuari admin (admin@voltamons.cat) → redirect directe a http://127.0.0.1:8000/admin/dashboard
+Revisa si això pot generar conflictes amb middleware, guards o verificació de sessió.
+Formulari de consulta de producte:
+Accessible sense login.
+Si l’usuari està autenticat:
+No demanar nom/cognoms ni mail.
+Si NO està autenticat:
+Camps obligatoris:
+Nom i cognoms
+Mail
+Camps comuns:
+Camp obligatori per indicar producte (nom, referència o identificador visible)
+Textarea de consulta amb límit de 150 caràcters
+El botó d’enviament només ha d’aparèixer quan tots els camps siguin vàlids.
+Simular enviament amb spinner/loading.
+Evitar duplicació entre versió logged i guest.
+Gestió de descomptes admin:
+Actualment es poden aplicar descomptes però no revertir-los.
+Afegir:
+restaurar preu original
+eliminar descompte
+guardar preu original abans d’aplicar descompte
+Solució escalable i segura.
+Funcionalitats admin pendents:
+
+4.1 Gestió d’usuaris (admin):
+
+Veure tots els usuaris
+Editar usuaris
+Eliminar usuaris registrats
+
+4.2 Gestió de comandes (admin) :
+
+Veure comandes
+Actualitzar estat
+Eliminar comandes
+
+4.3 Categories i subcategories (admin) :
+
+CRUD complet categories
+CRUD complet subcategories
+Relació amb Eloquent Relationships
+Possibilitat de moure subcategories entre categories amb selector
+
+4.4 Gestió de productes (admin) :
+
+Crear productes
+Editar productes
+Eliminar productes
+Assignar categories/subcategories
+Actualitzar preu
+Augmentar/reduir stock
+Relacions amb Eloquent
+Sistema de recordatori de reviews:
+La funcionalitat de reviews ja existeix però probablement falta el popup/modal.
+Quan un usuari compra un producte:
+mostrar opcions:
+Fer comentari
+No fer-lo
+Cancel·lar
+Guardar decisió a BD.
+Afegir camp boolean has_to_comment a la taula pivot entre comandes i productes.
+Quan l’usuari inicia sessió:
+fer crida AJAX per comprovar has_to_comment
+si és true → mostrar notificació/modal de recordatori review
+Prioritzar una implementació neta i reutilitzable.

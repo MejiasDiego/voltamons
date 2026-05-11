@@ -11,6 +11,40 @@ use Inertia\Response;
 
 class BookController extends Controller
 {
+    public function pendingReviews(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json([]);
+        }
+
+        $pendingItems = OrderItem::query()
+            ->with(['book:id,title,slug'])
+            ->whereHas('order', fn ($query) => $query->where('user_id', $user->id))
+            ->where('has_to_comment', true)
+            ->latest('id')
+            ->get();
+
+        return response()->json($pendingItems);
+    }
+
+    public function reviewDecision(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'order_item_id' => ['required', 'exists:order_items,id'],
+            'decision' => ['required', 'in:comment,skip'],
+        ]);
+
+        if ($validated['decision'] === 'skip') {
+            OrderItem::query()
+                ->where('id', $validated['order_item_id'])
+                ->update(['has_to_comment' => false]);
+        }
+
+        return response()->json(['message' => 'Decisio registrada.']);
+    }
+
     public function preview(string $slug): JsonResponse
     {
         $book = Book::query()

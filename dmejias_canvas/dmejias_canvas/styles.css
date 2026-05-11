@@ -1,0 +1,17 @@
+/* El body será el contenedor flex */
+body {
+  margin: 0; /* elimina márgenes por defecto */
+  height: 100vh; /* ocupa toda la altura de la ventana */
+  display: flex; /* activa flexbox */
+  justify-content: center; /* centra horizontalmente */
+  align-items: center; /* centra verticalmente */
+}
+
+#titol {
+  text-align: center;
+}
+
+/* Estilo del canvas */
+#myCanvas {
+  border: 1px solid black;
+}

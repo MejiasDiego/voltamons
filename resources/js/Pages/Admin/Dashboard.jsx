@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -77,6 +77,7 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
     const [books, setBooks] = useState(initialBooks);
     const [discountPercent, setDiscountPercent] = useState(0);
     const [isSubmittingDiscount, setIsSubmittingDiscount] = useState(false);
+    const [isRestoringPrices, setIsRestoringPrices] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const chartRef = useRef(null);
     const [legendData, setLegendData] = useState([]);
@@ -164,6 +165,20 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
         }
     };
 
+    const restorePrices = async () => {
+        setIsRestoringPrices(true);
+
+        try {
+            await axios.post(route('admin.books.restore'));
+
+            setFeedbackMessage('Preus originals restaurats. Recarrega la pagina per veure els canvis.');
+        } catch {
+            setFeedbackMessage('No s\'han pogut restaurar els preus.');
+        } finally {
+            setIsRestoringPrices(false);
+        }
+    };
+
     const applyDiscount = async () => {
         setIsSubmittingDiscount(true);
 
@@ -181,7 +196,7 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
     };
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Panell admin</h2>}>
+        <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-stone-800">Panell admin</h2>}>
             <Head title="Panell admin" />
 
             <div className="py-12">
@@ -189,19 +204,36 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
                     <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                         {cards.map((card) => (
                             <article key={card.label} className="overflow-hidden bg-white p-5 shadow-sm sm:rounded-lg">
-                                <p className="text-sm text-gray-600">{card.label}</p>
-                                <p className="mt-2 text-2xl font-semibold text-gray-900">{card.value}</p>
+                                <p className="text-sm text-stone-600">{card.label}</p>
+                                <p className="mt-2 text-2xl font-semibold text-stone-900">{card.value}</p>
                             </article>
                         ))}
                     </section>
 
                     <section className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="border-b border-gray-200 px-6 py-4">
-                            <h3 className="text-lg font-medium text-gray-900">Accions rapides</h3>
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-200 px-6 py-4">
+                            <h3 className="text-lg font-medium text-stone-900">Accions rapides</h3>
+                            <div className="flex flex-wrap gap-2">
+                                <Link href={route('admin.books.index')} className="rounded-md bg-amber-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-800">
+                                    Productes
+                                </Link>
+                                <Link href={route('admin.categories.index')} className="rounded-md bg-amber-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-800">
+                                    Categories
+                                </Link>
+                                <Link href={route('admin.subcategories.index')} className="rounded-md bg-amber-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-800">
+                                    Subcategories
+                                </Link>
+                                <Link href={route('admin.orders.index')} className="rounded-md bg-amber-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-800">
+                                    Comandes
+                                </Link>
+                                <Link href={route('admin.users.index')} className="rounded-md bg-amber-700 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-amber-800">
+                                    Usuaris
+                                </Link>
+                            </div>
                         </div>
-                        <div className="grid gap-4 px-6 py-4 sm:grid-cols-[1fr_auto] sm:items-end">
+                        <div className="grid gap-4 px-6 py-4 sm:grid-cols-[1fr_auto_auto] sm:items-end">
                             <div>
-                                <label htmlFor="discount" className="mb-1 block text-sm font-medium text-gray-700">
+                                <label htmlFor="discount" className="mb-1 block text-sm font-medium text-stone-700">
                                     Descompte global (%)
                                 </label>
                                 <input
@@ -223,17 +255,26 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
                             >
                                 {isSubmittingDiscount ? 'Aplicant...' : 'Aplicar descompte'}
                             </button>
+
+                            <button
+                                type="button"
+                                disabled={isRestoringPrices}
+                                onClick={restorePrices}
+                                className="rounded-md border border-amber-300 px-4 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100 disabled:opacity-60"
+                            >
+                                {isRestoringPrices ? 'Restaurant...' : 'Restaurar preus'}
+                            </button>
                         </div>
 
                         {feedbackMessage && <p className="px-6 pb-4 text-sm font-medium text-emerald-700">{feedbackMessage}</p>}
                     </section>
 
                     <section className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="border-b border-gray-200 px-6 py-4">
-                            <h3 className="text-lg font-medium text-gray-900">Vendes per producte (Canvas)</h3>
+                        <div className="border-b border-amber-200 px-6 py-4">
+                            <h3 className="text-lg font-medium text-stone-900">Vendes per producte (Canvas)</h3>
                         </div>
                         <div className="px-6 py-4">
-                            <canvas ref={chartRef} width="1000" height="340" className="h-auto w-full rounded border border-gray-100 bg-white" />
+                            <canvas ref={chartRef} width="1000" height="340" className="h-auto w-full rounded border border-amber-100 bg-white" />
 
                             <div id="llegenda" className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                                 {legendData.map((item) => (
@@ -246,40 +287,40 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
                     </section>
 
                     <section className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="border-b border-gray-200 px-6 py-4">
-                            <h3 className="text-lg font-medium text-gray-900">Llistat de llibres i estoc</h3>
+                        <div className="border-b border-amber-200 px-6 py-4">
+                            <h3 className="text-lg font-medium text-stone-900">Llistat de llibres i estoc</h3>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full divide-y divide-amber-200">
+                                <thead className="bg-amber-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Titol
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Autor
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Categoria
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Estoc
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Preu
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-stone-500">
                                             Estat
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-200 bg-white">
+                                <tbody className="divide-y divide-amber-200 bg-white">
                                     {books.map((book) => (
                                         <tr key={book.id}>
-                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{book.title}</td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{book.author}</td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{book.category?.name}</td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
+                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-stone-900">{book.title}</td>
+                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-stone-700">{book.author}</td>
+                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-stone-700">{book.category?.name}</td>
+                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-stone-700">
                                                 <input
                                                     type="number"
                                                     min="0"
@@ -288,7 +329,7 @@ export default function AdminDashboard({ stats, books: initialBooks, salesChart 
                                                     className="w-20 rounded-md border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500"
                                                 />
                                             </td>
-                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{Number(book.price).toFixed(2)} EUR</td>
+                                            <td className="whitespace-nowrap px-6 py-4 text-sm text-stone-700">{Number(book.price).toFixed(2)} EUR</td>
                                             <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                                                 {book.stock > 0 ? (
                                                     <span className="rounded bg-emerald-100 px-2 py-1 text-emerald-700">Disponible</span>

@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import BookCover from '@/Components/BookCover';
@@ -8,6 +8,7 @@ import StoreLayout from '@/Layouts/StoreLayout';
 import { formatPrice } from '@/lib/cart';
 
 export default function CatalogShow({ book, relatedBooks, pendingCommentOrderItemId }) {
+    const { auth } = usePage().props;
     const [opinions, setOpinions] = useState([]);
     const [ratingInfo, setRatingInfo] = useState({ rating: 0, count: 0 });
     const [filterFrom, setFilterFrom] = useState('');
@@ -16,6 +17,47 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
     const [isSubmittingOpinion, setIsSubmittingOpinion] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [form, setForm] = useState({ rating: 0, title: '', comment: '' });
+    const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', message: '' });
+    const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
+    const [inquirySent, setInquirySent] = useState(false);
+    const [inquiryEmailError, setInquiryEmailError] = useState('');
+
+    const validateInquiryEmail = (value) => {
+        if (!value.trim()) {
+            setInquiryEmailError('El correu electronic es obligatori.');
+        } else if (!/^\S+@\S+\.\S+$/.test(value.trim())) {
+            setInquiryEmailError('Introdueix un correu electronic valid.');
+        } else {
+            setInquiryEmailError('');
+        }
+    };
+
+    const isInquiryValid = useMemo(() => {
+        if (!inquiryForm.message.trim() || inquiryForm.message.trim().length > 150) {
+            return false;
+        }
+
+        if (!inquiryForm.name.trim() || !inquiryForm.email.trim()) {
+            return false;
+        }
+
+        if (!/^\S+@\S+\.\S+$/.test(inquiryForm.email.trim())) {
+            return false;
+        }
+
+        return true;
+    }, [inquiryForm]);
+
+    const submitInquiry = async (event) => {
+        event.preventDefault();
+        setIsSubmittingInquiry(true);
+
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+
+        setInquirySent(true);
+        setInquiryForm({ name: '', email: '', message: '' });
+        setIsSubmittingInquiry(false);
+    };
 
     const hasPendingComment = useMemo(() => Boolean(pendingCommentOrderItemId), [pendingCommentOrderItemId]);
 
@@ -175,6 +217,88 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
                 )}
 
                 <section className="mt-8 rounded-xl border border-amber-200 bg-white p-5 shadow-sm">
+                    <h2 className="text-xl font-bold text-amber-950">Consulta sobre aquest producte</h2>
+
+                    {inquirySent ? (
+                        <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+                            <p className="text-sm font-medium text-emerald-800">Gracies! La teva consulta ha estat enviada correctament.</p>
+                            <button
+                                type="button"
+                                onClick={() => setInquirySent(false)}
+                                className="mt-2 text-sm font-semibold text-emerald-700 underline hover:text-emerald-900"
+                            >
+                                Enviar una altra consulta
+                            </button>
+                        </div>
+                    ) : (
+                        <form onSubmit={submitInquiry} className="mt-4 space-y-4">
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label htmlFor="inquiry-name" className="mb-1 block text-sm font-medium text-stone-700">
+                                        Nom i cognoms
+                                    </label>
+                                    <input
+                                        id="inquiry-name"
+                                        type="text"
+                                        value={inquiryForm.name}
+                                        onChange={(event) => setInquiryForm((previous) => ({ ...previous, name: event.target.value }))}
+                                        className="w-full rounded-md border-stone-300 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="inquiry-email" className="mb-1 block text-sm font-medium text-stone-700">
+                                        Correu electronic
+                                    </label>
+                                    <input
+                                        id="inquiry-email"
+                                        type="email"
+                                        value={inquiryForm.email}
+                                        onChange={(event) => {
+                                            setInquiryForm((previous) => ({ ...previous, email: event.target.value }));
+                                            if (inquiryEmailError) setInquiryEmailError('');
+                                        }}
+                                        onBlur={(event) => validateInquiryEmail(event.target.value)}
+                                        className={`w-full rounded-md text-sm focus:border-amber-500 focus:ring-amber-500 ${inquiryEmailError ? 'border-rose-400' : 'border-stone-300'}`}
+                                        required
+                                    />
+                                    {inquiryEmailError && <p className="mt-1 text-xs text-rose-600">{inquiryEmailError}</p>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="inquiry-message" className="mb-1 block text-sm font-medium text-stone-700">
+                                    El teu missatge
+                                </label>
+                                <textarea
+                                    id="inquiry-message"
+                                    value={inquiryForm.message}
+                                    onChange={(event) => setInquiryForm((previous) => ({ ...previous, message: event.target.value }))}
+                                    className="w-full rounded-md border-stone-300 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                    rows={4}
+                                    placeholder="Explica'ns el teu dubte o consulta sobre aquest producte (maxim 150 caracters)"
+                                    maxLength={150}
+                                    required
+                                />
+                                <p className="mt-1 text-right text-xs text-stone-500">
+                                    {inquiryForm.message.length}/150
+                                </p>
+                            </div>
+
+                            {isInquiryValid && (
+                                <button
+                                    type="submit"
+                                    disabled={isSubmittingInquiry}
+                                    className="rounded-md bg-amber-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-800 disabled:opacity-60"
+                                >
+                                    {isSubmittingInquiry ? 'Enviant...' : 'Enviar consulta'}
+                                </button>
+                            )}
+                        </form>
+                    )}
+                </section>
+
+                <section className="mt-8 rounded-xl border border-amber-200 bg-white p-5 shadow-sm">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                         <h2 className="text-xl font-bold text-amber-950">Opinions i valoracions</h2>
                         <div className="flex items-center gap-3">
@@ -266,6 +390,7 @@ export default function CatalogShow({ book, relatedBooks, pendingCommentOrderIte
                         )}
                     </div>
                 </section>
+
             </StoreLayout>
         </>
     );
