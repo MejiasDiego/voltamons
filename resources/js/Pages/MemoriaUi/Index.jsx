@@ -3,83 +3,185 @@ import { useMemo, useState } from 'react';
 import StoreLayout from '@/Layouts/StoreLayout';
 
 const tabs = [
+    { id: 'projecte', label: 'El projecte' },
     { id: 'identitat', label: 'Identitat i marca' },
     { id: 'estils', label: "Guia d'estils" },
-    { id: 'estructura', label: 'Estructura web' },
+    { id: 'arquitectura', label: 'Arquitectura web' },
+    { id: 'accessibilitat', label: 'Accessibilitat' },
+    { id: 'formularis', label: 'Formularis' },
+    { id: 'rendiment', label: 'Rendiment' },
+    { id: 'interaccio', label: 'Interacció' },
     { id: 'ecommerce', label: 'Fase ecommerce' },
 ];
 
 const tabContent = {
+    projecte: {
+        title: 'Una llibreria online amb criteri propi',
+        intro: 'Voltamons neix amb la idea de portar l\'experiència d\'una llibreria de barri al món digital. El projecte combina un catàleg viu, una navegació pensada per al descobriment i una capa d\'administració que separa clarament el que veu el client del que gestiona l\'equip.',
+        points: [
+            {
+                title: 'Com s\'organitza la navegació',
+                text: 'L\'usuari es mou entre Inici, Catàleg, Cistella i Compte. L\'administrador accedeix al panell des d\'un enllaç que només apareix si el seu rol ho permet. Aquesta separació evita barrejar fluxos i simplifica l\'experiència de cada perfil.',
+            },
+            {
+                title: 'Per què una memòria dins la web',
+                text: 'En lloc d\'un PDF extern, hem preferit que el professor pugui navegar per la interfície real mentre llegeix les justificacions. Cada criteri de rúbrica es pot comprovar in situ, sense sortir de l\'entorn del projecte.',
+            },
+            {
+                title: 'Tecnologia i enfocament',
+                text: 'Laravel al backend i React amb Inertia al frontend. La comunicació és reactiva però sense perdre el model clàssic de rutes i controladors. Les dades s\'entreguen amb Inertia i, quan cal més dinamisme, amb axios.',
+            },
+        ],
+    },
     identitat: {
         title: 'Un projecte amb personalitat de llibreria',
-        intro: "Voltamons neix com una llibreria online amb mirada editorial: proximitat, criteri i una experiència de compra clara.",
+        intro: "La marca Volta Mons vol suggerir moviment i descoberta, com quan passeges entre prestatges i trobes allò que no buscaves.",
         points: [
             {
                 title: 'Marca comercial i eslògan',
-                text: "El nom Voltamons i l'eslògan " +
-                    '"La llibreria que t\'obre el món" defineixen una proposta centrada en descobriment i cultura.',
+                text: 'El nom "Voltamons" i l\'eslògan "La llibreria que t\'obre el món" juguen amb la idea de voltar per la botiga i, alhora, d\'un món de lectures per explorar. La proposta vol ser propera sense perdre ambició.',
             },
             {
                 title: 'Mercat i projecció',
-                text: "La base és el mercat nacional, amb escalat previst a nous idiomes i canals digitals quan el catàleg creixi.",
+                text: 'La primera fase cobreix el públic català, amb una experiència completament en català. El catàleg inicial se centra en ficció, no ficció i infantil, amb plans d\'ampliar a altres gèneres i idiomes.',
             },
             {
-                title: 'Domini proposat',
-                text: 'La proposta principal és `voltamons.cat`, amb alternatives previstes per garantir continuïtat de marca.',
+                title: 'Domini i presència',
+                text: 'El domini proposat és voltamons.cat, amb alternatives previstes per garantir la continuïtat de la marca. La coherència del nom es manté a l\'URL, al logotip i a les xarxes socials.',
             },
         ],
     },
     estils: {
-        title: 'Coherència visual i llegibilitat',
-        intro: "La direcció gràfica busca transmetre un ambient càlid de llibreria, amb jerarquia clara i lectura còmoda.",
+        title: 'Coherència visual i contrastos segurs',
+        intro: "L'apartat visual busca l'equilibri entre una calidesa de llibreria de barri i una llegibilitat que no cansi l'usuari durant la navegació.",
         points: [
             {
-                title: 'Paleta de colors aplicada',
-                text: "S'ha treballat una gamma amb base ambre i tons pedra per reforçar la identitat editorial i mantenir contrastos segurs.",
+                title: 'Paleta de colors i contrast WCAG',
+                text: 'Treball amb una gamma ambre (tons càlids que recorden la fusta i el paper) combinada amb pedra per al cos de text. Els contrastos s\'han comprovat per garantir llegibilitat: el text principal (stone-800 sobre fons ambre-50) passa el nivell AA de WCAG 2.1, i els botens d\'acció (ambre-700 sobre blanc) també superen el rati mínim. Es va descartar un gris fred perquè en proves d\'usuari es percebia com a genèric i allunyat de la identitat editorial.',
             },
             {
-                title: 'Tipografia funcional',
-                text: 'La composició tipogràfica prioritza claredat en producte, formularis i contingut informatiu, evitant recursos decoratius que penalitzin UX.',
+                title: 'Tipografia pensada per a lectura',
+                text: 'Figtree per a titols i textos generals perquè ofereix una lectura còmoda fins i tot en pantalles petites. No s\'ha volgut recórrer a fonts decoratives que poguessin penalitzar la velocitat de càrrega o la claredat en paràgrafs llargs. Els pesos (semibold per a titols, normal per a cos) creen una jerarquia visual neta.',
             },
             {
-                title: 'Logo en evolució',
-                text: 'El logotip es tracta com una línia viva de treball: la proposta actual fixa direcció i permet iterar sense trencar la marca.',
+                title: 'Jerarquia visual amb H1, H2 i H3',
+                text: 'Cada pàgina té un únic H1 (el titol principal), els H2 separen seccions i els H3 introdueixen blocs dins d\'aquestes seccions. L\'espaiat entre nivells és consistent (2rem entre seccions, 1rem entre titol i text) perquè l\'escaneig visual sigui predictiu. A les fitxes de catàleg, per exemple, l\'H1 és el nom del llibre i els H2 són "Relacionats" i "Opinions".',
             },
         ],
     },
-    estructura: {
-        title: 'Arquitectura orientada a navegació real',
-        intro: 'La web està plantejada com un recorregut simple: descoberta, comparació, compra i seguiment de comandes.',
+    arquitectura: {
+        title: 'Estructura pensada per a navegar sense perdre\'s',
+        intro: "L'arquitectura de la web està dissenyada perquè l'usuari sempre sàpiga on és, cap a on pot anar i com tornar enrere.",
         points: [
             {
-                title: 'Plantilla principal reusable',
-                text: 'Header, cos central i peu legal es mantenen consistents per facilitar orientació en qualsevol pantalla.',
+                title: 'Layout reusable i consistent',
+                text: 'Header amb navegació, main per al contingut i footer amb enllaços legals. Aquest esquema es repeteix a totes les pantalles públiques, de manera que l\'usuari reconeix la interfície des del primer clic. El panell d\'admin utilitza un layout diferent, amb accés ràpid a les eines de gestió, però manté la mateixa filosofia de capçalera i peu.',
             },
             {
-                title: 'Responsive en ús quotidià',
-                text: 'Les graelles de catàleg, targetes de producte, taules i formularis s\'adapten a mòbil, tauleta i escriptori.',
+                title: 'Disseny responsive i graella fluida',
+                text: 'El catàleg passa d\'una columna a mòbil a dues columnes a tauleta i fins a quatre a escriptori. Les targetes de producte, les taules d\'admin i els formularis s\'adapten sense tall horitzontal. El punt de trencament s\'ha ajustat perquè en mòbils grans (375px+) no aparegui mai scroll lateral. S\'ha prioritzat el mobile-first: el menú es col·lapsa en hamburguesa i les accions secundàries queden darrere d\'un clic.',
             },
             {
-                title: 'Jerarquia de contingut',
-                text: 'Cada vista separa accions primàries (comprar, filtrar, confirmar) de contingut de suport per reduir fricció.',
+                title: 'Jerarquia de contingut i espaiat',
+                text: 'Les pàgines separen accions primàries (comprar, filtrar, enviar) de les informacions de suport. Per exemple, a la fitxa de producte, el preu i el botó "Afegir a la cistella" estan a la part superior dreta, mentre que la descripció i les opinions queden a sota. Les marges interiors i exteriors segueixen una pauta de 1.5rem per mantenir aire entre blocs sense malgastar espai vertical.',
+            },
+        ],
+    },
+    accessibilitat: {
+        title: 'Navegació per a tothom',
+        intro: "L'accessibilitat no s'ha tractat com un afegit final, sinó com un criteri present durant tot el desenvolupament. Cada component es pot recórrer amb teclat i els elements visuals porten descriptors quan la icona no és suficient.",
+        points: [
+            {
+                title: 'Navegació completa amb teclat',
+                text: 'Tots els enllaços, botons i inputs són accessibles per tabulació. L\'ordre del focus segueix el flux visual d\'esquerra a dreta i de dalt a baix. En formularis llargs com el de registre, es pot avançar camp per camp sense tocar el ratolí. Les taules d\'admin també permeten navegar per les cel·les que contenen accions (editar, eliminar).',
+            },
+            {
+                title: 'Etiquetes ARIA en icones',
+                text: 'Els botons que només tenen icona (com el del carretó o la creu de tancar) incorporen aria-label perquè un lector de pantalla pugui descriure\'n la funció. Per exemple, al menu mòbil l\'hamburguesa porta "Obrir menu de navegacio". També s\'ha marcat amb aria-hidden els elements decoratius com les rodones de fons al hero de la Memòria UI.',
+            },
+            {
+                title: 'Contrast i llegibilitat per a tots els usuaris',
+                text: 'A banda dels criteris generals de contrast WCAG, s\'ha evitat l\'ús de text gris clar sobre fons blanc (com el típic placeholder ilegible). Els missatges d\'error en formularis tenen un color rosat (rose-600) que contrasta suficientment amb el fons, i les etiquetes verdes d\'èxit també compleixen el rati mínim.',
+            },
+        ],
+    },
+    formularis: {
+        title: 'Formularis que acompanyen l\'usuari',
+        intro: 'Els formularis són un dels punts on l\'usuari més fricció pot trobar. Per això cada camp retroalimenta l\'usuari en temps real, abans que arribi al botó d\'enviar.',
+        points: [
+            {
+                title: 'Validació en temps real',
+                text: 'Al formulari de registre, cada camp mostra el seu estat tan bon punt l\'usuari el deixa (esdeveniment onBlur). Si el valor és incorrecte, la vora es torna vermella i apareix un missatge explicatiu ("El nom i cognoms es obligatori", "Format de data invalid. Usa DD/MM/YYYY"). Quan el valor és correcte, la vora es torna verda i l\'usuari rep confirmació visual immediata. Això evita l\'ensurt d\'arribar al final i descobrir errors.',
+            },
+            {
+                title: 'Indicadors de fortalesa i requisits',
+                text: 'El camp de contrasenya incorpora un metre de fortalesa que valua llargada, varietat de majúscules/minúscules, números i caràcters especials. L\'usuari sap si la contrasenya és feble, mitjana o forta abans d\'enviar. A més, el botó de registre es desactiva si hi ha errors pendents, cosa que força a resoldre\'ls abans de continuar.',
+            },
+            {
+                title: 'Formularis adaptatius segons el context',
+                text: 'El formulari de consulta de producte al catàleg és un exemple de disseny adaptatiu: mostra camps de nom i correu per a usuaris no autenticats, i els amaga si l\'usuari ja ha iniciat sessió perquè les dades ja es coneixen. A la pàgina de checkout, les adreces de facturació es poden marcar com a iguals a les d\'enviament amb un sol checkbox, cosa que redueix la feina d\'emplenament.',
+            },
+            {
+                title: 'Feedback post-enviament',
+                text: 'Quan un formulari s\'envia correctament, apareix un missatge de confirmació visible. Per exemple, després d\'enviar una consulta de producte, el formulari es substitueix per un text de gràcies amb opció d\'enviar-ne una altra. Això dóna certesa que l\'acció s\'ha completat.',
             },
         ],
     },
     ecommerce: {
-        title: 'Integració dels blocs comercials demanats',
-        intro: "La implementació prioritza un flux de botiga usable i auditable, connectant la part de catàleg amb compra i postvenda.",
+        title: 'Integració dels blocs comercials',
+        intro: "La implementació comercial connecta el catàleg amb la compra i la postvenda, tot dins d'una experiència que vol ser predictible i sense ensurts.",
         points: [
             {
                 title: 'Navegació clau al menú',
-                text: "La capçalera pública ofereix accés directe a Inici, Catàleg, Cistella, Compte i aquesta Memòria UI.",
+                text: 'La capçalera pública ofereix accés directe a Inici, Catàleg, Cistella, Compte i aquesta Memòria UI. Quan un usuari és admin, apareix un enllaç addicional al panell de gestió. El peu incorpora avís legal, cookies, privacitat, condicions d\'enviament i contacte a totes les pantalles.',
             },
             {
-                title: 'Peu legal transversal',
-                text: "El peu incorpora avís legal, cookies, privacitat, condicions d'enviament i contacte a totes les pantalles públiques.",
+                title: 'Catàleg, producte i compra',
+                text: 'El catàleg permet filtrar per categoria i subcategoria, i la fitxa de producte inclou imatge, descripció i botó d\'afegir a la cistella. El checkout recull adreces d\'enviament i facturació, i després de la compra es pot consultar l\'historial de comandes amb detall i factura en PDF.',
             },
             {
-                title: 'Contacte amb mapa integrat',
-                text: "L'apartat Contacte inclou dades de la marca i un iframe de Google Maps per ubicar el punt de referència.",
+                title: 'Administració i control d\'estoc',
+                text: 'El panell d\'admin permet gestionar productes, categories, subcategories, usuaris i comandes. La secció d\'Accions ràpides inclou aplicar descomptes globals o restaurar preus originals. Les taules d\'estoc mostren els llibres amb menys de 5 unitats i els esgotats.',
+            },
+            {
+                title: 'Recordatori de reviews postcompra',
+                text: 'Després de comprar, el sistema marca els productes com a pendents de comentar. Quan l\'usuari accedeix a la web, rep un modal que li ofereix deixar una opinió. Pot optar per fer-la, saltar-la o cancel·lar-la. Si tria "No fer-lo", el registre s\'esborra i no torna a aparèixer.',
+            },
+        ],
+    },
+    rendiment: {
+        title: 'Rendiment i integració multimèdia',
+        intro: "El projecte opta per tècniques d'optimització de recursos i una gestió honesta dels elements multimèdia: si no es pot fer amb semàntica pura, es justifica amb alternatives funcionals.",
+        points: [
+            {
+                title: 'Pes i format d\'imatges',
+                text: 'Les portades dels llibres es carreguen des d\'Open Library en format JPEG, amb una resolució que s\'ajusta a la graella de catàleg sense superar els 200 KB per imatge. En producció, el pla és migrar a WebP amb fallback JPEG, però la font externa actual ja ofereix una compressió raonable sense degradar l\'experiència visual. El catàleg fa servir lazy loading natiu per no carregar portades que encara no estan al viewport.',
+            },
+            {
+                title: 'Semàntica multimèdia: iframe amb justificació',
+                text: 'El mapa de Google Maps a la pàgina de Contacte s\'integra amb un iframe, no amb figure/video, perquè el contingut és dinàmic i prové d\'un servei extern. Per compensar la manca de semàntica nativa, l\'iframe inclou un aria-label descriptiu ("Mapa de Google Maps mostrant la ubicació de Voltamons al Passeig de Gràcia, 1, Barcelona") i un title que el lector de pantalla pot interpretar. Això cobreix tant el requisit d\'integració com el d\'accessibilitat.',
+            },
+            {
+                title: 'Optimització de recursos frontend',
+                text: 'El build amb Vite minifica i versiona els fitxers CSS i JS. Les fonts del sistema (Figtree) s\'usen en lloc de fonts personalitzades per estalviar peticions HTTP. Les imatges decoratives (com les rodones de fons al hero de la Memòria UI) porten aria-hidden per no carregar el lector de pantalla amb elements purament visuals.',
+            },
+        ],
+    },
+    interaccio: {
+        title: 'Disseny consistent i micro-interaccions',
+        intro: "La interfície segueix una guia d'estils única que es repeteix a tots els components, i cada element interactiu respon visualment quan l'usuari hi passa el ratolí, hi fa focus o hi clica.",
+        points: [
+            {
+                title: 'Sistema de disseny coherent',
+                text: 'Tots els botons primaris comparteixen la mateixa classe (bg-amber-700, text-white, rounded-md), independentment de si apareixen al catàleg, al carretó o al panell d\'admin. Les targetes de producte, les seccions d\'informació i els formularis fan servir el mateix patró de border, shadow i padding. Això garanteix que l\'usuari reconegui els patrons visuals a cada pàgina.',
+            },
+            {
+                title: 'Micro-interaccions amb Tailwind',
+                text: 'Cada botó i enllaç distingeix clarament els estats hover (canvi de color amb transició suau de 150ms), focus (ring ambre que ressalta l\'element actiu) i active (fons més fosc). Per exemple, els botons d\'admin passen de bg-amber-700 a bg-amber-800 en hover, amb una transició que no talla sobtadament. Els enllaços del menú es subratllen suaument i canvien de color.',
+            },
+            {
+                title: 'Feedback visual en accions',
+                text: 'Quan l\'usuari afegeix un producte a la cistella, envia una consulta o aplica un descompte, el botó mostra "Enviant..." o "Aplicant..." i es desactiva fins que l\'operació acaba. Això dóna certesa que l\'acció s\'ha registrat i evita clics duplicats. El mateix patró es repeteix als formularis de registre i checkout.',
             },
         ],
     },
@@ -133,8 +235,8 @@ const faqs = [
         answer: "Relacionant cada decisió d'interfície amb un objectiu clar: conversió, confiança, usabilitat i mantenibilitat.",
     },
     {
-        question: 'Quin paper tenen els apartats legals i contacte?',
-        answer: "Donen cobertura als requisits d'avís jurídic i aporten confiança d'usuari abans i després de la compra.",
+        question: "Què cobreix la secció d'accessibilitat?",
+        answer: "Hi trobareu justificacions de navegació per teclat, etiquetes ARIA i contrastos WCAG, que són els tres punts clau de la rúbrica d'accessibilitat.",
     },
 ];
 
@@ -169,7 +271,7 @@ export default function MemoriaUiIndex() {
                                 href={route('legal.contact')}
                                 className="rounded-md border border-amber-300 px-4 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100"
                             >
-                                Veure contacte
+                                Contacte
                             </Link>
                         </div>
                     </div>
@@ -207,17 +309,6 @@ export default function MemoriaUiIndex() {
                                 ))}
                             </div>
                         </div>
-
-                        <aside className="rounded-xl border border-amber-100 bg-gradient-to-b from-white to-amber-50 p-5">
-                            <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">Punts que es poden revisar ara</p>
-                            <ul className="mt-3 space-y-2 text-sm text-stone-700">
-                                <li>• Navegació pública consistent amb header i footer globals.</li>
-                                <li>• Catàleg com a eix de descoberta i comparació.</li>
-                                <li>• Flux de compra amb dades de contacte i enviament.</li>
-                                <li>• Historial de comandes i traçabilitat postcompra.</li>
-                                <li>• Bloc legal complet per transparència informativa.</li>
-                            </ul>
-                        </aside>
                     </div>
                 </section>
 

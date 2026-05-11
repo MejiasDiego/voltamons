@@ -46,6 +46,7 @@ export default function Contact() {
                         <div className="mt-4 overflow-hidden rounded-lg border border-amber-100">
                             <iframe
                                 title="Ubicació Voltamons"
+                                aria-label="Mapa de Google Maps mostrant la ubicació de Voltamons al Passeig de Gràcia, 1, Barcelona"
                                 src="https://www.google.com/maps?q=Passeig%20de%20Gracia%201%20Barcelona&output=embed"
                                 className="h-80 w-full"
                                 loading="lazy"
