@@ -63,8 +63,8 @@ class BookController extends Controller
             'price' => $validated['price'],
             'stock' => $validated['stock'],
             'cover_image' => $validated['cover_image'],
-            'category_id' => $validated['category_id'],
-            'subcategory_id' => $validated['subcategory_id'],
+            'category_id' => $validated['category_id'] ?: null,
+            'subcategory_id' => $validated['subcategory_id'] ?: null,
             'is_active' => $validated['is_active'],
         ]);
 
@@ -109,8 +109,8 @@ class BookController extends Controller
             'price' => $validated['price'],
             'stock' => $validated['stock'],
             'cover_image' => $validated['cover_image'],
-            'category_id' => $validated['category_id'],
-            'subcategory_id' => $validated['subcategory_id'],
+            'category_id' => $validated['category_id'] ?: null,
+            'subcategory_id' => $validated['subcategory_id'] ?: null,
             'is_active' => $validated['is_active'],
         ]);
 
