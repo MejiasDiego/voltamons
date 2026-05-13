@@ -28,17 +28,17 @@ export default function UpdateProfileInformation({
         <section className={className}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
+                    Informació del perfil
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
+                    Actualitza la informació del perfil i l'adreça electrònica del teu compte.
                 </p>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Nom" />
 
                     <TextInput
                         id="name"
@@ -54,7 +54,7 @@ export default function UpdateProfileInformation({
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <InputLabel htmlFor="email" value="Correu electrònic" />
 
                     <TextInput
                         id="email"
@@ -72,28 +72,28 @@ export default function UpdateProfileInformation({
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
                         <p className="mt-2 text-sm text-gray-800">
-                            Your email address is unverified.
+                            La teva adreça electrònica no està verificada.
                             <Link
                                 href={route('verification.send')}
                                 method="post"
                                 as="button"
                                 className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
-                                Click here to re-send the verification email.
+                                Fes clic aquí per reenviar el correu de verificació.
                             </Link>
                         </p>
 
                         {status === 'verification-link-sent' && (
                             <div className="mt-2 text-sm font-medium text-green-600">
-                                A new verification link has been sent to your
-                                email address.
+                                S'ha enviat un nou enllaç de verificació al teu
+                                correu electrònic.
                             </div>
                         )}
                     </div>
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton disabled={processing}>Desa</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -103,7 +103,7 @@ export default function UpdateProfileInformation({
                         leaveTo="opacity-0"
                     >
                         <p className="text-sm text-gray-600">
-                            Saved.
+                            Desat.
                         </p>
                     </Transition>
                 </div>

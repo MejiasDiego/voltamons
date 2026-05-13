@@ -26,12 +26,14 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Dashboard
-                                </NavLink>
+                                {user.role === 'admin' && (
+                                    <NavLink
+                                        href={route("admin.dashboard")}
+                                        active={route().current("admin.dashboard")}
+                                    >
+                                        Tauler
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -130,12 +132,14 @@ export default function AuthenticatedLayout({ header, children }) {
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {user.role === 'admin' && (
+                            <ResponsiveNavLink
+                                href={route("admin.dashboard")}
+                                active={route().current("admin.dashboard")}
+                            >
+                                Tauler
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-amber-200 pb-1 pt-4">
@@ -150,14 +154,14 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink href={route("profile.edit")}>
-                                Profile
+                                Perfil
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
                                 href={route("logout")}
                                 as="button"
                             >
-                                Log Out
+                                Tanca sessió
                             </ResponsiveNavLink>
                         </div>
                     </div>

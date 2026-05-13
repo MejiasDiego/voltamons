@@ -163,11 +163,12 @@ Afegir el contingut seguint l'estructura:
 3. **Seccio 1: Introduccio** - Descripcio, objectius, abast
 4. **Seccio 2: Stack Tecnologic** - Per cada tecnologia
 5. **Seccio 3: Arquitectura** - Estructura, flux, patrons
-6. **Seccio 4: Decisions Tecniques** - Problema, solucio, justificacio
+6. **Seccio 4: Decisions Tecniques i Detalls d'Implementacio** - Problema, solucio, justificacio, emmagatzematge, tecniques
 7. **Seccio 5: Funcionalitats** - Llista i detalls
-8. **Seccio 6: Desplegament** - Requisits, eines, instruccions
-9. **Seccio 7: Conclusions** - Avaluacio, aprenentatges, millores
-10. **Seccio 8: Referencies** - Documentacio, eines, enllaços
+8. **Seccio 6: Proves i Control d'Errors** - Tests, evidencies, errors
+9. **Seccio 7: Desplegament** - Requisits, eines, instruccions
+10. **Seccio 8: Conclusions** - Avaluacio, aprenentatges, millores
+11. **Seccio 9: Referencies** - Documentacio, eines, enllaços
 
 ### Pas 3: Executar l'script
 
@@ -213,13 +214,23 @@ Per cada tecnologia utilitzada (subseccio 2.X):
 - 3.3 Flux de Dades
 - 3.4 Patrons de Disseny
 
-### SECCIO 4: DECISIONES TECNIQUES
+### SECCIO 4: DECISIONS TECNIQUES I DETALLS D'IMPLEMENTACIO
 
 Per cada decisio important (subseccio 4.X):
 - Problema que es resol
 - Solucio implementada
 - Justificacio de la decisio
-- Alternatives descartades i per què
+- Alternatives descartades i per que
+
+#### 4.X Emmagatzematge de Dades
+- Com s'emmagatzemen les dades (arrays d'arrays, arrays d'objectes, localStorage, IndexDB)
+- Si s'usa IndexDB, com es vincula amb el back-end
+- Fragments de codi i imatges il·lustratives
+
+#### 4.X Tecniques de Programacio
+- Arrays paral·lels: en que es basen, funcionament i per que s'utilitzen
+- Metodes propis d'objectes: detall de cada metode, per a que serveixen i com funcionen
+- Fragments de codi i imatges il·lustratives
 
 ### SECCIO 5: FUNCIONALITATS IMPLEMENTADES
 
@@ -227,27 +238,33 @@ Per cada funcionalitat (subseccio 5.X):
 - Descripcio
 - Decisions de UX/UI
 
-### SECCIO 6: DESPLREGAMENT
+### SECCIO 6: PROVES I CONTROL D'ERRORS
 
-- 6.1 Requisits per Executar
-- 6.2 Eines de Desplegament
-- 6.3 Instruccions de Desplegament
-- 6.4 Consideracions de Seguretat
-- 6.5 Limitacions Conegudes
+- 6.1 Proves Realitzades - Llistat de totes les proves efectuades per trobar errors o defectes
+- 6.2 Evidencies de Proves - Imatges i captures que demostrin les proves realitzades
+- 6.3 Errors Trobats i Solucions - Incidencies detectades i com es van resoldre
 
-### SECCIO 7: CONCLUSIONS I TREBALL FUTUR
+### SECCIO 7: DESPLEGAMENT
 
-- 7.1 Avaluacio dels Objectius
-- 7.2 Aprenentatges
-- 7.3 Possibles Millores
-- 7.4 Valoracio Final
+- 7.1 Requisits per Executar
+- 7.2 Eines de Desplegament
+- 7.3 Instruccions de Desplegament
+- 7.4 Consideracions de Seguretat
+- 7.5 Limitacions Conegudes
 
-### SECCIO 8: REFERENCIES
+### SECCIO 8: CONCLUSIONS I TREBALL FUTUR
 
-- 8.1 Documentacio de Tecnologies
-- 8.2 Eines Utilitzades
-- 8.3 Estandards
-- 8.4 Repositori del Projecte
+- 8.1 Avaluacio dels Objectius
+- 8.2 Aprenentatges
+- 8.3 Possibles Millores
+- 8.4 Valoracio Final
+
+### SECCIO 9: REFERENCIES
+
+- 9.1 Documentacio de Tecnologies
+- 9.2 Eines Utilitzades
+- 9.3 Estandards
+- 9.4 Repositori del Projecte
 
 ---
 

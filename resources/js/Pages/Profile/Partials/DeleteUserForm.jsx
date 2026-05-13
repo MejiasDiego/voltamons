@@ -49,38 +49,38 @@ export default function DeleteUserForm({ className = '' }) {
         <section className={`space-y-6 ${className}`}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
-                    Delete Account
+                    Elimina el compte
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
+                    Un cop el compte s'elimini, tots els seus recursos i dades
+                    s'eliminaran permanentment. Abans d'eliminar el compte,
+                    descarrega qualsevol dada o informació que vulguis
+                    conservar.
                 </p>
             </header>
 
             <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
+                Elimina el compte
             </DangerButton>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
+                        Estàs segur que vols eliminar el teu compte?
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                        Un cop el compte s'elimini, tots els seus recursos i
+                        dades s'eliminaran permanentment. Introdueix la teva
+                        contrasenya per confirmar que vols eliminar
+                        el teu compte.
                     </p>
 
                     <div className="mt-6">
                         <InputLabel
                             htmlFor="password"
-                            value="Password"
+                            value="Contrasenya"
                             className="sr-only"
                         />
 
@@ -95,7 +95,7 @@ export default function DeleteUserForm({ className = '' }) {
                             }
                             className="mt-1 block w-3/4"
                             isFocused
-                            placeholder="Password"
+                            placeholder="Contrasenya"
                         />
 
                         <InputError
@@ -106,11 +106,11 @@ export default function DeleteUserForm({ className = '' }) {
 
                     <div className="mt-6 flex justify-end">
                         <SecondaryButton onClick={closeModal}>
-                            Cancel
+                            Cancel·la
                         </SecondaryButton>
 
                         <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
+                            Elimina el compte
                         </DangerButton>
                     </div>
                 </form>
