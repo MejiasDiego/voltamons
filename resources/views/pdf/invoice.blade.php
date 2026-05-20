@@ -25,7 +25,7 @@
     </div>
 
     <div class="section">
-        <h2>Adreca d'enviament</h2>
+        <h2>Adreça d'enviament</h2>
         <p>
             {{ $order->shipping_address }}<br>
             {{ $order->shipping_postal_code }} {{ $order->shipping_city }}<br>

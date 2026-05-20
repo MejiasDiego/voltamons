@@ -216,7 +216,7 @@ export default function Register() {
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                     <div>
-                        <InputLabel htmlFor="shipping_address" value="Adreca d'enviament" />
+                        <InputLabel htmlFor="shipping_address" value="Adreça d'enviament" />
                         <TextInput
                             id="shipping_address"
                             name="shipping_address"
@@ -295,7 +295,7 @@ export default function Register() {
                 {!data.billing_same_as_shipping && (
                     <div className="mt-4 grid gap-4 sm:grid-cols-2">
                         <div>
-                            <InputLabel htmlFor="billing_address" value="Adreca de facturacio" />
+                            <InputLabel htmlFor="billing_address" value="Adreça de facturacio" />
                             <TextInput
                                 id="billing_address"
                                 name="billing_address"
@@ -593,7 +593,7 @@ function validateAddress(value) {
     const validPattern = /^(?=.*\d)(?=.*[A-Za-zÀ-ÿ])[A-Za-zÀ-ÿ0-9\s,.'/-]{6,190}$/;
 
     if (!validPattern.test(value.trim())) {
-        return 'Introdueix una adreca valida.';
+        return 'Introdueix una adreça valida.';
     }
 
     return null;
