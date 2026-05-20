@@ -1,4 +1,4 @@
-# Guia del Frontend — Voltamons
+Voltamons
 
 ## Stack tecnològic
 
